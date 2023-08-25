@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,31 +50,65 @@ class _MyHomePageState extends State<MyHomePage> {
     print(names.length);
   }
 
+  List<String> filteredSchoolNames = [];
+
+  void updateFilteredSchools(String input) {
+    setState(() {
+      filteredSchoolNames = school_names
+          .where((schoolName) =>
+              schoolName.toLowerCase().contains(input.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('http Example'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: ElevatedButton(
-                onPressed: _callAPI,
-                child: const Text('Call API'),
-              ),
+      body: Column(
+        children: [
+          const SizedBox(height: 30),
+          Center(
+            child: ElevatedButton(
+              onPressed: _callAPI,
+              child: const Text('Call API'),
             ),
-            FutureBuilder(
-                future: _callAPI(),
-                builder: (context, s) {
-                  return Text(
-                    '$names',
-                    style: const TextStyle(color: Colors.black),
+          ),
+          TextField(
+            onChanged: (input) {
+              updateFilteredSchools(input);
+            },
+            decoration: const InputDecoration(
+              labelText: '학교명을 입력하세요',
+            ),
+          ),
+          ListView.builder(
+            itemCount: filteredSchoolNames.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(filteredSchoolNames[index]),
+                onTap: () {
+                  Get.snackbar(
+                    '알림',
+                    '버튼 눌림 ㅇㅇ',
+                    snackPosition: SnackPosition.BOTTOM,
+                    duration: const Duration(seconds: 2),
                   );
-                }),
-          ],
-        ),
+                },
+              );
+            },
+          ),
+
+          /*
+              FutureBuilder(
+                  future: _callAPI(),
+                  builder: (context, s) {
+                    return Text(
+                      '$names',
+                      style: const TextStyle(color: Colors.black),
+                    );
+                  }),*/
+        ],
       ),
     );
   }
