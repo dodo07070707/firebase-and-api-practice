@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
       for (var schoolData in arr) {
         String schoolName = schoolData['SCHUL_NM'];
         names.add(schoolName);
+        school_names.add(schoolName);
       }
     }
     names = names.toSet().toList();
@@ -88,12 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               return ListTile(
                 title: Text(filteredSchoolNames[index]),
                 onTap: () {
-                  Get.snackbar(
-                    '알림',
-                    '버튼 눌림 ㅇㅇ',
-                    snackPosition: SnackPosition.BOTTOM,
-                    duration: const Duration(seconds: 2),
-                  );
+                  print('selected!');
                 },
               );
             },
