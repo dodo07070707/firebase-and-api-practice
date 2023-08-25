@@ -31,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List names = [];
-
+  List<String> school_names = [];
   Future<void> _callAPI() async {
     for (int index = 1; index <= 13; index++) {
       var url = Uri.parse(
@@ -44,6 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
         names.add(schoolName);
       }
     }
+    names = names.toSet().toList();
+    names.sort();
     print('lengths :');
     print(names.length);
   }
@@ -54,23 +56,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('http Example'),
       ),
-      body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: _callAPI,
-              child: const Text('Call API'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: ElevatedButton(
+                onPressed: _callAPI,
+                child: const Text('Call API'),
+              ),
             ),
-          ),
-          FutureBuilder(
-              future: _callAPI(),
-              builder: (context, s) {
-                return Text(
-                  '$names',
-                  style: const TextStyle(color: Colors.black),
-                );
-              }),
-        ],
+            FutureBuilder(
+                future: _callAPI(),
+                builder: (context, s) {
+                  return Text(
+                    '$names',
+                    style: const TextStyle(color: Colors.black),
+                  );
+                }),
+          ],
+        ),
       ),
     );
   }
